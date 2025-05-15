@@ -95,3 +95,66 @@ def isantissimetrica(M):
 #-------------------------
 
 
+# -*- coding: utf-8 -*-
+"""
+Created on Thu May 15 10:13:01 2025
+
+@author: 2240711
+"""
+import numpy as np
+import pandas as pd
+
+from numpy.linalg import matrix_power as MP
+
+FICHEIRO = pd.ExcelFile('Matriz_Adj_Ex1.xlsx')
+F1 = pd.read_excel(FICHEIRO, 'MAdj', header=None)
+A=F1.to_numpy()
+
+# caminhos de comprimento 3
+
+A3=A@A@A
+
+
+#do vértice V2 para o V6
+A3[1,5]
+
+#caminhjos de comp. menor ou igual a 4
+# B4=A+A^2+A^#+A^4
+
+B4 = A + MP(A, 2) + MP(A, 3) + MP(A, 4)
+
+#grau de saída de vértice 3
+Gsaida3=0
+
+for i in range(6):
+    Gsaida3+=A[2,i]
+    
+Gsaida3
+
+#grau de entrada de vértice 3
+Gsaida3=0
+
+for i in range(6):
+    Gsaida3+=A[i,2]
+    
+Gsaida3
+
+#------------------------------------
+
+for i in range(6):
+    Gsaida=0
+    for j in range(6):
+        Gsaida+=A[i,j]
+        print('vertice'+str(i+1), 'saida'+str(Gsaida))
+
+#--------------------------------------
+#matriz de caminho
+
+soma=A
+for i in range(2,7):
+    soma+=MP(A,i)
+P=soma
+P[P!=0]=1
+
+(P==np.ones(6).all())
+
