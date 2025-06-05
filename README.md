@@ -158,3 +158,67 @@ P[P!=0]=1
 
 (P==np.ones(6).all())
 
+#-------------------------------------
+
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun  5 09:50:19 2025
+
+@author: 2240711
+"""
+
+#%%
+
+import numpy as np
+
+#%%
+
+def Warshall(A):
+    L,C=A.shape
+    P=A.copy()
+    for k in range(L):
+        print(k,P)
+        for i in range(L):
+            for j in range(L):
+                P[i,j]=P[i,j] or (P[i,k] and P[k,i])
+                
+    return P
+
+A=np.array([[1,1,0,0], [1,0,0,1], [0,1,0,0], [1,0,1,0]])
+
+P=Warshall(A)
+
+#%%
+
+def Warshall_MIN(W):
+    L,C=W.shape
+    #-------------------------
+    Q=W.copy(). astype(float)
+    for i in range(L):
+        for j in range(L):
+            if Q[i,j]==0:
+                Q[i,j]=np.inf
+    #--------------------------
+    M=np.empty((L,L)).astype(str)
+    for i in range(L):
+        for j in range(L):
+            if W[i,j]==0:
+                M[i,j]='-'
+            else:
+                M[i,j]=str(i)+str(j)
+                
+    #------------------------
+    for k in range(L):
+        for i in range(L):
+            for j in range(L):
+                if Q[i,j]>Q[i,j]+Q[k,j]:
+                    Q[i,j]=Q[i,j]+Q[k,j]
+                    M[i,j]=M[i,k]+M[k,j][1:]
+                    
+                
+    return Q,M
+
+A=np.array([[7,5,0,0], [7,0,0,2], [0,3,0,0], [4,0,1,0]])
+
+Q,M=Warshall_MIN(W)
+
